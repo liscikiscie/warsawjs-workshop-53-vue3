@@ -12,7 +12,7 @@
       </button>
     </h1>
     <main class="container mx-auto grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-4 p-6">
-      <img class="rounded-xl" :src="meme.url" v-for="(meme, idx) in memes"/>
+      <img class="rounded-xl" :src="meme.url" v-for="meme in memes"/>
     </main>
   </div>
 </template>
@@ -23,7 +23,7 @@ import MemeGenerator from '@/components/MemeGenerator.vue';
 
 
 export default defineComponent({
-  components: { MemeGenerator },
+  components: {MemeGenerator },
   data() {
     const memes = localStorage.getItem('memes');
     return {
