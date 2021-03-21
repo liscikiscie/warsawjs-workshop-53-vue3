@@ -1,13 +1,18 @@
 <template>
-  <div v-if="create">
-    <h1 class="text-3xl font-bold text-center">Create meme</h1>
-    <meme-generator @update:model-value="save" @cancel="create = false"/>
-  </div>
+  <teleport to="body">
+    <Modal v-if="create"
+           :title="'Create meme'"
+           v-model="create">
+      <meme-generator @update:model-value="save"
+                      @cancel="toggleModal(false)"
+      />
+    </Modal>
+  </teleport>
 
-  <div v-else>
+  <div>
     <h1 class="text-3xl font-bold text-center">
       Meme gallery
-      <button class="p-2 ml-2 bg-blue-500 text-lg text-white font-bold rounded" @click="create = true">
+      <button class="p-2 ml-2 bg-blue-500 text-lg text-white font-bold rounded" @click="toggleModal(true)">
         Create new
       </button>
     </h1>
@@ -18,12 +23,13 @@
 </template>
 
 <script>
-import {defineComponent, toRaw} from 'vue'
+import { defineComponent, toRaw } from 'vue'
 import MemeGenerator from '@/components/MemeGenerator.vue';
+import Modal from '@/components/Modal.vue';
 
 
 export default defineComponent({
-  components: {MemeGenerator },
+  components: {MemeGenerator, Modal},
   data() {
     const memes = localStorage.getItem('memes');
     return {
@@ -32,16 +38,19 @@ export default defineComponent({
     }
   },
   methods: {
-    save(meme) {
-      this.memes = this.memes.concat([meme])
+    save( meme ) {
+      this.memes = this.memes.concat([ meme ])
       this.create = false
+    },
+    toggleModal( state ) {
+      this.create = state
     }
   },
   watch: {
-    memes(value) {
+    memes( value ) {
       const valueStringified = JSON.stringify(toRaw(value));
       localStorage.setItem('memes', valueStringified)
     }
-  },
+  }
 })
 </script>
